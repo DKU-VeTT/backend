@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class VettGatewayServerApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(VettGatewayServerApplication.class, args);
 	}
 
