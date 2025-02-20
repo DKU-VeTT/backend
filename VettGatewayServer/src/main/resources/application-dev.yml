@@ -1,11 +1,6 @@
 server:
   port: 9000
 
-logging:
-  level:
-    com.netflix.discovery: DEBUG
-    org.springframework.cloud.netflix.eureka: DEBUG
-
 eureka:
   client:
     register-with-eureka: true
@@ -17,8 +12,11 @@ eureka:
     hostname: vett-eureka-server
 
 spring:
-  profiles:
-    active: dev
+  config:
+    activate:
+      on-profile: dev
+  main:
+    web-application-type: reactive
   application:
     name: VettGatewayServer
   cloud:
@@ -52,3 +50,6 @@ spring:
           uri: lb://VETT-CHAT-SERVER
           predicates:
             - Path=/chat/**, /sub/**, /ws, /pub/**
+
+jwt:
+  secret: ${JWT_SECRET}
