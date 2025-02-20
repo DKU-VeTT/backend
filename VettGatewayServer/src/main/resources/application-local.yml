@@ -1,0 +1,56 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    allow-redirects: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  main:
+    web-application-type: reactive
+  application:
+    name: VettGatewayServer
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - 'http://localhost:5173'
+            allowCredentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - PATCH
+              - OPTIONS
+      routes:
+        - id: vett-auth-service
+          uri: lb://VETT-AUTH-SERVER
+          predicates:
+            - Path=/auth/**
+        - id: vett-place-service
+          uri: lb://VETT-PLACE-SERVER
+          predicates:
+            - Path=/place/**
+        - id: vett-chat-service
+          uri: lb://VETT-CHAT-SERVER
+          predicates:
+            - Path=/chat/**, /sub/**, /ws, /pub/**
+
+jwt:
+  secret: ${JWT_SECRET}
+
