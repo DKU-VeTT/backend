@@ -1,4 +1,4 @@
-package kr.ac.dankook.VettAuthServer.controller;
+package kr.ac.dankook.VettAuthServer.admin;
 
 import kr.ac.dankook.VettAuthServer.entity.Member;
 import kr.ac.dankook.VettAuthServer.service.MemberService;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth/api")
+@RequestMapping("/auth/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final MemberService memberService;
 
-    @GetMapping("/admin/members")
+    @GetMapping("/members")
     public ResponseEntity<List<Member>> findAllMembersByAdmin(){
         return ResponseEntity.ok(memberService.findAllMemberProcess());
     }

@@ -25,10 +25,12 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
         String path = exchange.getRequest().getURI().getPath();
-        if (path.startsWith("/auth/")) {
+        if (path.startsWith("/auth/") || path.startsWith("/admin")) {
             return chain.filter(exchange);
         }
+        // /auth/ or /admin으로 시작하지 않는 것을 filter
         log.info("Jwt Authentication in Resource Server -{}",path);
         String token = extractToken(exchange);
         if (token == null) {
