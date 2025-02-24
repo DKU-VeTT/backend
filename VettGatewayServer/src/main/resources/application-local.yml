@@ -41,16 +41,24 @@ spring:
         - id: vett-auth-service
           uri: lb://VETT-AUTH-SERVER
           predicates:
-            - Path=/auth/**
+            - Path=/auth/**, /admin/auth/**
         - id: vett-place-service
           uri: lb://VETT-PLACE-SERVER
           predicates:
-            - Path=/place/**
+            - Path=/place/**, /admin/place/**
         - id: vett-chat-service
           uri: lb://VETT-CHAT-SERVER
           predicates:
-            - Path=/chat/**, /sub/**, /ws, /pub/**
+            - Path=/chat/**, /admin/chat/**, /sub/**, /ws, /pub/**
+        - id: vett-admin-service
+          uri: lb://VETT-ADMIN-SERVER
+          predicates:
+            - Path=/admin/**
 
 jwt:
   secret: ${JWT_SECRET}
+admin:
+  secret: ${ADMIN_SECRET}
+  header:
+    name: ${ADMIN_HEADER}
 
