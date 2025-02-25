@@ -20,7 +20,7 @@ public class AdminPlaceRestController {
     private String ADMIN_GATEWAY_SERVER_URL;
 
     @GetMapping("/test")
-    public String testAction(){
+    public String testGithubActions(){
         return "Actions test Good";
     }
 }
