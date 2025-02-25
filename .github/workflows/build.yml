@@ -1,0 +1,37 @@
+name: Build VeTT Admin Server
+
+on:
+  push:
+    paths:
+      - './VettAdminServer/**'
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./VettAdminServer
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: |
+          export SPRING_PROFILES_ACTIVE=dev
+          ./gradlew build
+
+      - name: Move JAR to root directory
+        run: mv build/libs/*.jar ../../VettAdminServer
