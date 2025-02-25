@@ -21,6 +21,6 @@ public class AdminPlaceRestController {
 
     @GetMapping("/test")
     public String testAction(){
-        return "Good";
+        return "Actions test Good";
     }
 }
