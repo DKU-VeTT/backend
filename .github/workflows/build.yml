@@ -34,4 +34,4 @@ jobs:
           ./gradlew build -x test
 
       - name: Move JAR to root directory
-        run: mv build/libs/*.jar ../../VettAdminServer
+        run: mv build/libs/*.jar ../../
