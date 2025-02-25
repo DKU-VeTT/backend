@@ -21,6 +21,6 @@ public class AdminPlaceRestController {
 
     @GetMapping("/test")
     public String testGithubActions(){
-        return "Actions test Good!";
+        return "Actions test Good!!";
     }
 }
