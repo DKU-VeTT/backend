@@ -3,7 +3,7 @@ name: Build VeTT Admin Server
 on:
   push:
     paths:
-      - './VettAdminServer/**'
+      - 'VettAdminServer/**'
     branches:
       - main
       - develop
