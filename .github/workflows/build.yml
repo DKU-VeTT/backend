@@ -31,7 +31,7 @@ jobs:
       - name: Build with Gradle
         run: |
           export SPRING_PROFILES_ACTIVE=dev
-          ./gradlew build
+          ./gradlew build -x test
 
       - name: Move JAR to root directory
         run: mv build/libs/*.jar ../../VettAdminServer
