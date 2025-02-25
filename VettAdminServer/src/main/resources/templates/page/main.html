@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/default_layout}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VeTT</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/main.css}" >
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="main-container">
+        <h2 class="header">
+            Site administration
+        </h2>
+        <div class="admin-container">
+            <div class="section-left">
+                <div class="section-block">
+                    <h3 class="section-title">AUTHENTICATION AND AUTHORIZATION</h3>
+                    <ul class="item-list">
+                        <li>
+                            <span class="item-name">Groups</span>
+                            <span class="actions">
+                        <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                        <li>
+                            <span class="item-name">Users</span>
+                            <span class="actions">
+                      <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="section-block">
+                    <h3 class="section-title">CATALOG</h3>
+                    <ul class="item-list">
+                        <li>
+                            <span class="item-name">Authors</span>
+                            <span class="actions">
+                      <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                        <li>
+                            <span class="item-name">Book instances</span>
+                            <span class="actions">
+                      <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                        <li>
+                            <span class="item-name">Books</span>
+                            <span class="actions">
+                      <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                        <li>
+                            <span class="item-name">Genres</span>
+                            <span class="actions">
+                      <a href="#">+ Add</a> | <a href="#">Change</a>
+                    </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-right">
+                <div class="recent-actions">
+                    <h3>Recent actions</h3>
+                    <p><strong>My actions</strong></p>
+                    <p>None available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/main.js}"></script>
+    </th:block>
+</div>
+</body>
+</html>

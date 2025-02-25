@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display&family=Dela+Gothic+One&family=Oxygen:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400&family=Playwrite+NZ:wght@100..400&display=swap');
+
+body{
+    font-weight:500;
+    font-family: "Noto Sans KR", sans-serif;
+}
+.layout-fragment{
+    padding-top:80px;
+}
+.navbar{
+    padding:20px 5% 20px 5% !important;
+    background-color:#090d00 !important;
+    font-weight: bold;
+    position: fixed;
+    width:100%;
+    z-index: 1000;
+}
+.navbar-brand{
+    font-weight:bold;
+    font-family: 'DM Serif Display', serif;
+    color:white;
+    margin-right:30px;
+    font-size:25px;
+}
+.navbar-brand:hover{
+    color:#ff6b6b;
+}
+.nav-link{
+    cursor:pointer;
+    color:white !important;
+}
+.nav-link:hover{
+    border-bottom: 2px solid #ff6b6b;
+    color:#ff6b6b;
+}
+.dropdown-item:hover{
+    color:#ff6b6b;
+}
+#footer{
+    width:100%;
+    margin-top:30px;
+    padding:3em 0 3em 0;
+    text-align: center;
+    font-weight: bold;
+    color:white;
+    background-color:#090d00;
+    clear:both;
+}
+.name, .copyright{
+    font-size:14px;
+    margin:10px 0;
+}
+.copyright{
+    margin-top:30px;
+}
+#footer a {
+    color:white;
+    text-decoration: none;
+}
+.icon-container{
+    margin-top:30px;
+}
+.icon_link {
+    margin:0 20px;
+    font-size:30px;
+}
+.icon:hover{
+    color:#ff6b6b;
+}
+.notyf__toast {
+    max-width: 600px !important;
+    white-space: pre-line !important;
+    text-align: center !important;
+}

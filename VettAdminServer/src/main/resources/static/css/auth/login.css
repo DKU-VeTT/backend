@@ -1,0 +1,97 @@
+body {
+    background-color: #f4f4f4;
+}
+.header{
+    text-align: center;
+}
+.header h1 {
+    font-family: "Playwrite NZ", cursive;
+    font-weight: bold;
+    font-optical-sizing: auto;
+    font-size:35px;
+    font-style: normal;
+    padding:30px 0;
+    color:#453fb2;
+}
+.description{
+    color:#333333;
+    opacity: 0.8;
+    font-size: 15px;
+}
+.wrapper{
+    width:400px;
+    margin:0 auto;
+    padding:100px 0;
+}
+.form-description{
+    font-size:23px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.error-message{
+    font-weight: bold;
+    text-align: center;
+    font-size: 15px;
+    color:red;
+    margin:20px 0;
+}
+.login-form{
+    background-color: white;
+    padding:30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 8px #3333;
+}
+.login-form input{
+    display:block;
+    height:45px;
+    padding:10px 10px;
+    border:1px solid #c4c4c4;
+    border-radius: 8px;
+    background-color:#fff;
+    color:#333;
+    font-size: 15px;
+    font-weight:bold;
+    font-family: "Noto Sans KR", sans-serif;
+    box-sizing:border-box;
+    width:100%;
+    margin:10px 0;
+}
+.login-form input:focus{
+    border-color: #453fb2;
+    border-width: 1px;
+    outline: none;
+}
+.button-container{
+    margin:20px 0;
+}
+.submit-button{
+    width:100%;
+    margin:0 auto;
+    text-align: center;
+    font-size:15px;
+    font-weight: 600;
+    border: none;
+    padding: 10px 50px;
+    border-radius: 8px;
+    background-color: #453fb2;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.submit-button:hover{
+    transform: scale(1.1);
+}
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out forwards;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VeTT</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+    <th:block th:replace="~{config/config :: configFragment}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/auth/login.css}" >
+</head>
+<body>
+<div class="wrapper">
+    <div class="login-form">
+        <div class="header">
+            <h1>VeTT Admin</h1>
+        </div>
+        <form th:action="@{/admin/auth/login-proc}" method="post">
+            <div>
+                <label for="userId" hidden="hidden">ADMIN ID</label>
+                <input oninput="hideErrorMessage()" type="text" placeholder="ADMIN ID" id="userId" name="userId">
+            </div>
+            <div>
+                <label for="password" hidden="hidden">ADMIN PASSWORD</label>
+                <input oninput="hideErrorMessage()" type="password" placeholder="ADMIN PASSWORD" id="password" name="password">
+            </div>
+            <div class="error-message-wrapper" th:if="${errorMessage != null}">
+                <p class="error-message" th:text="${errorMessage}"></p>
+            </div>
+            <div class="button-container">
+                <button class="submit-button" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/auth/login.js}"></script>
+<th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+</body>
+</html>

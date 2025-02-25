@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <title>VeTT</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+    <th:block th:replace="~{config/config :: configFragment}"></th:block>
+    <th:block layout:fragment="css"></th:block>
+    <th:block layout:fragment="script"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/header :: headerFragment}"></th:block>
+<th:block th:class="layout-fragment" layout:fragment="content"></th:block>
+<th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+</body>
