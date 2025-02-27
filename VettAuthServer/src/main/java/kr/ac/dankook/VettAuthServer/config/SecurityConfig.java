@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -27,7 +28,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -43,9 +44,8 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers("/auth/identity/**","/actuator/health", "/eureka/**").permitAll()
+                                .requestMatchers("/auth/identity/**","/admin/auth/**","/actuator/health", "/eureka/**").permitAll()
                                 .requestMatchers("/auth/api/user/**").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/auth/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(jwtTokenProvider,jwtErrorResponseHandler), UsernamePasswordAuthenticationFilter.class)

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails{
 
     private Member member;
 
@@ -35,21 +35,25 @@ public class PrincipalDetails implements UserDetails {
     }
 
     @Override
+    @SuppressWarnings("RedundantMethodOverride")
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @SuppressWarnings("RedundantMethodOverride")
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @SuppressWarnings("RedundantMethodOverride")
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @SuppressWarnings("RedundantMethodOverride")
     public boolean isEnabled() {
         return true;
     }

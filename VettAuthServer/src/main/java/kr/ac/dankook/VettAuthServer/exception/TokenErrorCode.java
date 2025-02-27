@@ -13,7 +13,7 @@ public enum TokenErrorCode implements ErrorCode{
     UNAUTHORIZED_INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "There is no member matching the provided username and password."),
     CLIENT_CLOSED_REQUEST_ACCESS_TOKEN_EXPIRED(HttpStatus.valueOf(408), "AccessToken is expired."),
     UNAUTHORIZED_INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "AccessToken is not valid."),
-    INTERNAL_SERVER_ERROR_TOKEN_PARSING(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred during token parsing processing.");
+    INTERNAL_SERVER_ERROR_TOKEN_PARSING(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred during Authentication processing.");
 
     private final HttpStatus httpStatus;
     private final String message;

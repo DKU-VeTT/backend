@@ -12,6 +12,7 @@ import java.util.List;
 public class CorsConfig {
 
     private static final String DEVELOP_FRONT_ADDRESS = "http://localhost:5173";
+    private static final String PROD_FRONT_ADDRESS = "https://web-vett-frontend-ss7z32llwmafmaz.sel5.cloudtype.app";
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -20,6 +21,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern(DEVELOP_FRONT_ADDRESS);
+        config.addAllowedOriginPattern(PROD_FRONT_ADDRESS);
         config.addAllowedHeader("*");
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH","OPTIONS"));
         source.registerCorsConfiguration("/**",config);

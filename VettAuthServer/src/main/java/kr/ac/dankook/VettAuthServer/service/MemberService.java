@@ -53,12 +53,12 @@ public class MemberService {
     public List<Member> findAllMemberProcess(){
         return memberRepository.findAll();
     }
+
     @Transactional(readOnly = true)
     public Member findMemberByUserIdProcess(String userId){
         Optional<Member> member = memberRepository.findByUserId(userId);
         return member.orElse(null);
     }
-
 
     @Transactional(readOnly = true)
     public Member findMemberByIdProcess(Long id){
@@ -133,6 +133,7 @@ public class MemberService {
         eventPublisher.publishEvent(eventBox);
         return generateNewTokenUsingUpdatingAuthentication(editMember);
     }
+
     // Password 변경 시 다시 로그인 필요
     @Transactional
     public void editMemberPasswordProcess(Long id,String newPassword){
@@ -140,7 +141,7 @@ public class MemberService {
         Member targetMember = findMemberByIdProcess(id);
         deletePreviousRefreshToken(targetMember.getUserId());
         SecurityContextHolder.clearContext();
-        
+
         String encodePassword = passwordEncoder.encode(newPassword);
         targetMember.setPassword(encodePassword);
         memberRepository.save(targetMember);

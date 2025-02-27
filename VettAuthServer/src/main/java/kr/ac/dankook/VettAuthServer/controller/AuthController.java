@@ -77,6 +77,16 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse<>(200,true));
     }
 
+    @PostMapping("/social")
+    public ResponseEntity<ApiResponse<TokenResponse>> socialLogin(
+            @RequestBody @Valid SocialSignInRequest socialSignInRequest, BindingResult bindingResult
+    ){
+        if (bindingResult.hasErrors()){
+            validateBindingResult(bindingResult);
+        }
+        return ResponseEntity.ok(new ApiResponse<>(201,authService.socialLoginProcess(socialSignInRequest)));
+    }
+
     @GetMapping("/is-duplicate/{userId}")
     public ResponseEntity<ApiResponse<Boolean>> isDuplicate(@PathVariable String userId){
         return ResponseEntity.ok(new ApiResponse<>(200,authService.isExistUserIdProcess(userId)));

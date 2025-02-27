@@ -33,10 +33,14 @@ public class MailService {
     public MailResponse createMailResponse(Member member){
         String verificationCode = generateVerificationCode();
         saveVerificationCode(member, verificationCode);
+        String lineSeparator = System.lineSeparator();
+        String content = "안녕하세요. VETT 인증번호 안내 관련 이메일 입니다." + lineSeparator
+                + "회원님의 인증 번호는 " + verificationCode + " 입니다." + lineSeparator
+                + "인증 후에 비밀번호를 변경해주세요.";
         return MailResponse.builder()
                 .mailAddress(member.getEmail())
                 .title("VETT 인증번호 안내 이메일 입니다.")
-                .content("안녕하세요. VETT 인증번호 안내 관련 이메일 입니다. 회원님의 인증 번호는 " + verificationCode + " 입니다. 인증 후에 비밀번호를 변경을 해주세요.")
+                .content(content)
                 .build();
     }
 

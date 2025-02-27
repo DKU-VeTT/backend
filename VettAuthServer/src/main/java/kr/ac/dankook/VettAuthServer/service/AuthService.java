@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import kr.ac.dankook.VettAuthServer.config.principal.PrincipalDetails;
 import kr.ac.dankook.VettAuthServer.dto.request.SignInRequest;
 import kr.ac.dankook.VettAuthServer.dto.request.SignupRequest;
+import kr.ac.dankook.VettAuthServer.dto.request.SocialSignInRequest;
 import kr.ac.dankook.VettAuthServer.dto.request.TokenRequest;
 import kr.ac.dankook.VettAuthServer.dto.response.TokenResponse;
 import kr.ac.dankook.VettAuthServer.entity.Member;
@@ -18,6 +19,7 @@ import kr.ac.dankook.VettAuthServer.repository.MemberRepository;
 import kr.ac.dankook.VettAuthServer.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -35,6 +37,9 @@ import java.util.UUID;
 @Slf4j
 public class AuthService {
 
+    @Value("${social.login.secret}")
+    private String socialSecret;
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -47,6 +52,22 @@ public class AuthService {
     public boolean isExistUserIdProcess(String userId){
         return memberRepository.existsByUserId(userId);
     }
+
+    @Transactional
+    public TokenResponse socialLoginProcess(SocialSignInRequest socialSignInRequest){
+        String socialId = socialSignInRequest.getUserId();
+        Optional<Member> member = memberRepository.findByUserId(socialId);
+        if (member.isPresent()){
+            return signInProcess(new SignInRequest(socialId,socialSecret));
+        }
+        SignupRequest signupRequest = SignupRequest.builder()
+                .name(socialSignInRequest.getName())
+                .email(socialSignInRequest.getEmail())
+                .userId(socialId)
+                .password(socialSecret).build();
+        return signupProcess(signupRequest);
+    }
+
 
     @Transactional
     public TokenResponse signupProcess(SignupRequest signupRequest) {
@@ -64,9 +85,6 @@ public class AuthService {
                 .build();
         memberRepository.save(newMember);
         memberRepository.flush();
-        TokenResponse token = signInProcess(
-                new SignInRequest(newMember.getUserId(),signupRequest.getPassword())
-        );
         String eventId = UUID.randomUUID().toString();
         String payload = eventObjectMapper.eventObjectToJson(
                 new MemberEvent(
@@ -80,6 +98,9 @@ public class AuthService {
                 .eventType("UserCreated")
                 .payload(payload).build();
         eventPublisher.publishEvent(eventBox);
+        TokenResponse token = signInProcess(
+                new SignInRequest(newMember.getUserId(),signupRequest.getPassword())
+        );
         return new TokenResponse(token.getAccessToken(),token.getRefreshToken());
     }
 
@@ -87,7 +108,7 @@ public class AuthService {
     public TokenResponse signInProcess(SignInRequest signInRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(signInRequest.getUserId(),signInRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(signInRequest.getUserId(), signInRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         // 만약 로그인 실패 시 해당 로직은 실행되지 않음.
