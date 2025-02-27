@@ -49,7 +49,7 @@ public class AdminAuthenticationFilter implements GlobalFilter {
         if (!Pattern.matches("/admin/.+", path)) {
             return chain.filter(exchange);
         }
-        // /admin/ + 1글자 이상시 필터 진행 /admin은 filter 진행 X
+        // /admin/ + 1글자 이상시 필터 진행
         log.info("Admin Authentication in Resource Server -{}", path);
 
         String apiKey = exchange.getRequest().getHeaders().getFirst(HEADER_NAME);
