@@ -28,6 +28,7 @@ spring:
           '[/**]':
             allowedOrigins:
               - 'http://localhost:5173'
+              - 'https://web-vett-frontend-ss7z32llwmafmaz.sel5.cloudtype.app'
             allowCredentials: true
             allowedHeaders: '*'
             allowedMethods:
@@ -41,7 +42,7 @@ spring:
         - id: vett-auth-service
           uri: lb://VETT-AUTH-SERVER
           predicates:
-            - Path=/auth/**, /admin/auth/**
+            - Path=/auth/**, /admin/auth/**, /oauth2/**
         - id: vett-place-service
           uri: lb://VETT-PLACE-SERVER
           predicates:
@@ -50,10 +51,10 @@ spring:
           uri: lb://VETT-CHAT-SERVER
           predicates:
             - Path=/chat/**, /admin/chat/**, /sub/**, /ws, /pub/**
-        - id: vett-admin-service
-          uri: lb://VETT-ADMIN-SERVER
-          predicates:
-            - Path=/admin/**
+#        - id: vett-admin-service
+#          uri: lb://VETT-ADMIN-SERVER
+#          predicates:
+#            - Path=/admin/**
 
 jwt:
   secret: ${JWT_SECRET}

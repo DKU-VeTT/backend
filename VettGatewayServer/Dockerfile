@@ -8,5 +8,6 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 COPY --from=build /app/build/libs/VettGatewayServer-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9000
+
 ENV SPRING_PROFILES_ACTIVE=dev
 ENTRYPOINT ["java", "-jar", "app.jar"]
