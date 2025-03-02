@@ -29,6 +29,7 @@ spring:
             allowedOrigins:
               - 'http://localhost:5173'
               - 'https://web-vett-frontend-ss7z32llwmafmaz.sel5.cloudtype.app'
+              - 'https://port-0-vett-admin-ss7z32llwmafmaz.sel5.cloudtype.app'
             allowCredentials: true
             allowedHeaders: '*'
             allowedMethods:
