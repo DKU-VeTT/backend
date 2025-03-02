@@ -16,6 +16,6 @@ public class AdminPlaceRestController {
 
     @Value("${admin.header.name}")
     private String ADMIN_HEADER_NAME;
-    @Value("${admin.gateway.server-url}")
-    private String ADMIN_GATEWAY_SERVER_URL;
+//    @Value("${admin.gateway.server-url}")
+//    private String ADMIN_GATEWAY_SERVER_URL;
 }
