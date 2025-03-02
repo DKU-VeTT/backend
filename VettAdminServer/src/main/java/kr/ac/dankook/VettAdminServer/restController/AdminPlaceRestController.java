@@ -18,9 +18,4 @@ public class AdminPlaceRestController {
     private String ADMIN_HEADER_NAME;
     @Value("${admin.gateway.server-url}")
     private String ADMIN_GATEWAY_SERVER_URL;
-
-    @GetMapping("/test")
-    public String testGithubActions(){
-        return "Actions test Good!!!";
-    }
 }
