@@ -14,12 +14,12 @@ jobs:
       - name: Connect deploy key
         uses: cloudtype-github-actions/connect@v1
         with:
-          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          token: ${{ secrets.ADMIN_CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
-          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          token: ${{ secrets.ADMIN_CLOUDTYPE_TOKEN }}
           project: okc0202/nahc
           stage: main
           yaml: >
