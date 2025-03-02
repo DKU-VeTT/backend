@@ -1,0 +1,52 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - main
+    path:
+      - 'VettAdminServer/**'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: okc0202/nahc
+          stage: main
+          yaml: >
+            name: vett-admin
+
+            app: java@21
+
+            options:
+              ports: "9096"
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+                - name: MONGODB_URI
+                  value: ${{ secrets.MONGODB_URI }}
+                - name: DATABASE_URL
+                  value: ${{ secrets.DATABASE_URL }}
+                - name: DATABASE_USERNAME
+                  value: ${{ secrets.DATABASE_USERNAME }}
+                - name: DATABASE_PASSWORD
+                  value: ${{ secrets.DATABASE_PASSWORD }}
+                - name: ADMIN_SECRET
+                  value: ${{ secrets.ADMIN_SECRET }}
+                - name: ADMIN_HEADER
+                  value: ${{ secrets.ADMIN_HEADER }}
+              buildenv: []
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
+              preset: java-springboot
