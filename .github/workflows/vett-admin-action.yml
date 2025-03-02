@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-    path:
+    paths:
       - 'VettAdminServer/**'
 jobs:
   deploy:
@@ -49,4 +49,5 @@ jobs:
               git:
                 url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
+              workdir: VettAdminServer
               preset: java-springboot
