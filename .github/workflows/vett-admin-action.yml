@@ -44,6 +44,8 @@ jobs:
                   value: ${{ secrets.ADMIN_SECRET }}
                 - name: ADMIN_HEADER
                   value: ${{ secrets.ADMIN_HEADER }}
+                - name: VETT_BACKEND_URL
+                  value: ${{ secrets.VETT_BACKEND_URL }}
               buildenv: []
             context:
               git:
