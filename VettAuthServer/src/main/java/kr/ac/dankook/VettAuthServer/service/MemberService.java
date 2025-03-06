@@ -49,6 +49,7 @@ public class MemberService {
                 .map(Member::getUserId)
                 .collect(Collectors.toList());
     }
+
     @Transactional(readOnly = true)
     public List<Member> findAllMemberProcess(){
         return memberRepository.findAll();
@@ -72,6 +73,7 @@ public class MemberService {
     public MemberResponse convertMemberEntity(Member member){
         return MemberResponse.builder()
                 .id(EncryptionUtil.encrypt(member.getId()))
+                .name(member.getName())
                 .userId(member.getUserId())
                 .email(member.getEmail())
                 .createTime(member.getCreatedDateTime())

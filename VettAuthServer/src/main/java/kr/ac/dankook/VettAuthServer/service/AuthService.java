@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,6 +48,7 @@ public class AuthService {
     private final JwtRedisHandler jwtRedisHandler;
     private final ApplicationEventPublisher eventPublisher;
     private final EventObjectMapper eventObjectMapper;
+    private final MailService mailService;
 
     @Transactional(readOnly = true)
     public boolean isExistUserIdProcess(String userId){
@@ -54,7 +56,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse socialLoginProcess(SocialSignInRequest socialSignInRequest){
+    public TokenResponse socialLoginProcess(SocialSignInRequest socialSignInRequest) throws IOException {
         String socialId = socialSignInRequest.getUserId();
         Optional<Member> member = memberRepository.findByUserId(socialId);
         if (member.isPresent()){
@@ -70,7 +72,7 @@ public class AuthService {
 
 
     @Transactional
-    public TokenResponse signupProcess(SignupRequest signupRequest) {
+    public TokenResponse signupProcess(SignupRequest signupRequest) throws IOException {
 
         if (isExistUserIdProcess(signupRequest.getUserId())){
             throw new ApiException(ApiErrorCode.DUPLICATE_ID);
@@ -101,6 +103,7 @@ public class AuthService {
         TokenResponse token = signInProcess(
                 new SignInRequest(newMember.getUserId(),signupRequest.getPassword())
         );
+        mailService.sendSignupMail(newMember.getEmail());
         return new TokenResponse(token.getAccessToken(),token.getRefreshToken());
     }
 
@@ -111,6 +114,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(signInRequest.getUserId(), signInRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
         // 만약 로그인 실패 시 해당 로직은 실행되지 않음.
         TokenResponse token = jwtTokenProvider.generateToken(authentication);
         String userId = signInRequest.getUserId();

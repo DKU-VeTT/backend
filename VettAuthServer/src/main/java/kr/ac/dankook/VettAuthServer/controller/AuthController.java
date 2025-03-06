@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,10 +40,10 @@ public class AuthController {
     }
 
     @PostMapping("/verify-code/{userId}")
-    public ResponseEntity<ApiResponse<AuthMailResponse>> sendVerifyCode(@PathVariable String userId) {
+    public ResponseEntity<ApiResponse<AuthMailResponse>> sendVerifyCode(@PathVariable String userId) throws IOException {
         if (authService.isExistUserIdProcess(userId)) {
             Member member = memberService.findMemberByUserIdProcess(userId);
-            MailResponse mailResponse = mailService.createMailResponse(member);
+            MailResponse mailResponse = mailService.createVerifyCodeMailResponse(member);
             mailService.sendMail(mailResponse);
             return ResponseEntity.ok(new ApiResponse<>(200,new AuthMailResponse(member.getEmail(),userId, true)));
         }
@@ -80,7 +81,7 @@ public class AuthController {
     @PostMapping("/social")
     public ResponseEntity<ApiResponse<TokenResponse>> socialLogin(
             @RequestBody @Valid SocialSignInRequest socialSignInRequest, BindingResult bindingResult
-    ){
+    ) throws IOException {
         if (bindingResult.hasErrors()){
             validateBindingResult(bindingResult);
         }
@@ -93,7 +94,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ApiResponse<TokenResponse>> signup(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult){
+    public ResponseEntity<ApiResponse<TokenResponse>> signup(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()){
             validateBindingResult(bindingResult);
         }
