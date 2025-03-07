@@ -22,7 +22,5 @@ public class EditMemberRequest {
     private String email;
 
     @NotBlank(message = "ID is required.")
-    @Size(min = 7, max = 30, message = "ID must be between 7 and 30 characters.")
-    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "ID can only contain alphanumeric characters.")
     private String userId;
 }

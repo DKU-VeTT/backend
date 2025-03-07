@@ -3,7 +3,6 @@ package kr.ac.dankook.VettAuthServer.controller;
 import jakarta.validation.Valid;
 import kr.ac.dankook.VettAuthServer.config.principal.PrincipalDetails;
 import kr.ac.dankook.VettAuthServer.dto.request.EditMemberRequest;
-import kr.ac.dankook.VettAuthServer.dto.request.EditPasswordRequest;
 import kr.ac.dankook.VettAuthServer.dto.response.ApiMessageResponse;
 import kr.ac.dankook.VettAuthServer.dto.response.ApiResponse;
 import kr.ac.dankook.VettAuthServer.dto.response.MemberResponse;
@@ -63,19 +62,6 @@ public class MemberController {
         TokenResponse newToken = memberService.editMemberProcess(id,editMemberRequest);
         return ResponseEntity.ok(new ApiResponse<>(
                 200,newToken));
-    }
-
-    @PatchMapping("/password/{id}")
-    public ResponseEntity<ApiMessageResponse> editMemberPassword(
-            @PathVariable @DecryptId Long id,
-            @RequestBody @Valid EditPasswordRequest editPasswordRequest,
-            BindingResult bindingResult
-    ){
-        if (bindingResult.hasErrors()){
-            validateBindingResult(bindingResult);
-        }
-        memberService.editMemberPasswordProcess(id,editPasswordRequest.getPassword());
-        return ResponseEntity.ok(new ApiMessageResponse(true,200,"Edit Password success."));
     }
 
     private void validateBindingResult(BindingResult bindingResult) {
