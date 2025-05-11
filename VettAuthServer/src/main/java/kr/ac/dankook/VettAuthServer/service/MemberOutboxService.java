@@ -33,6 +33,7 @@ public class MemberOutboxService {
     public List<Outbox> getFailedOutboxEvents(){
         return outboxRepository.findByStatus(OutboxStatus.PERMANENTLY_FAILED.toString());
     }
+
     @Transactional
     public void saveNewOutboxProcess(OutboxEvent outboxEvent) {
 
