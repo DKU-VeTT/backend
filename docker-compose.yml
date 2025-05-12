@@ -76,6 +76,10 @@ services:
         condition: service_started
       vett-chat-server:
         condition: service_started
+      vett-llm-chat-server:
+        condition: service_started
+      vett-api-integration-server:
+        condition: service_started
       vett-kafka:
         condition: service_healthy
     networks:
