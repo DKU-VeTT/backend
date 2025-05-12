@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+langchain
+langchain-core
+langchain-community
+langchain-upstage
+langchain-pinecone
+python-dotenv
+pymongo
+pytz
