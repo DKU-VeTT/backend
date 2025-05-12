@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
         String path = exchange.getRequest().getURI().getPath();
         if (path.startsWith("/auth/") || path.startsWith("/admin")
-            || path.startsWith("/oauth2/")){
+            || path.startsWith("/oauth2/") || path.startsWith("/py/llm")){
             return chain.filter(exchange);
         }
         // /auth/ or /admin으로 시작하지 않는 것을 filter
