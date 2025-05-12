@@ -42,7 +42,7 @@ async def verify_frontend_token(request: Request):
         )
 
 
-@app.post("/fetch", response_class=PlainTextResponse)
+@app.post("/py/llm/fetch", response_class=PlainTextResponse)
 async def initial_vector_database(request: Request, _: None = Depends(verify_frontend_token)):
 
     embedding = UpstageEmbeddings(model="embedding-query")
@@ -60,7 +60,7 @@ async def initial_vector_database(request: Request, _: None = Depends(verify_fro
     return "Success Initial Vector Database."
 
 
-@app.post("/chat", response_class=PlainTextResponse)
+@app.post("/py/llm/chat", response_class=PlainTextResponse)
 async def chat_with_ai(request: Request, _: None = Depends(verify_frontend_token)):
     payload = await request.json()
     user_message = payload.get("message", "")

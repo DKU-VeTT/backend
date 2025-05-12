@@ -60,6 +60,10 @@ spring:
           uri: lb://VETT-API-INTEGRATION-SERVER
           predicates:
             - Path=/proxy/api/**
+        - id: vett-llm-service
+          uri: http://localhost:5000
+          predicates:
+            - Path=/py/llm/**
 
 jwt:
   secret: ${JWT_SECRET}
