@@ -61,7 +61,7 @@ spring:
           predicates:
             - Path=/proxy/api/**
         - id: vett-llm-service
-          uri: http://localhost:5000
+          uri: http://vett-llm-server:5000
           predicates:
             - Path=/py/llm/**
 
