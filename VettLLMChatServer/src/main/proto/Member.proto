@@ -1,0 +1,20 @@
+syntax= "proto3";
+
+option java_multiple_files = false;
+option java_package="kr.ac.dankook";
+option java_outer_classname="MemberSync";
+
+service MemberSyncService {
+  rpc sendMemberInfo (MemberSyncRequest) returns (MemberSyncResponse);
+}
+
+message MemberSyncRequest {
+  string id = 1;
+}
+
+message MemberSyncResponse {
+  string id = 1;
+  string userId = 2;
+  string email = 3;
+  string name = 4;
+}
