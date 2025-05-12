@@ -1,33 +1,166 @@
 services:
-    zookeeper-0:
-      image: bitnami/zookeeper:3.9.2
-      container_name: zookeeper-0
-      ports:
-        - 2181:2181
-      environment:
-        ZOOKEEPER_CLIENT_PORT: 2181
-        ALLOW_ANONYMOUS_LOGIN: yes
-  
-    kafka-0:
-      image: bitnami/kafka:3.7.0
-      container_name: kafka-0
-      ports:
-        - 9094:9094
-      environment:
-        ALLOW_PLAINTEXT_LISTENER: yes
-        KAFKA_ENABLE_KRAFT: no
-        KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper-0:2181
-        KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,EXTERNAL://:9094
-        KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-0:9092,EXTERNAL://localhost:9094
-        KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
-  
-    kafka-ui:
-      image: provectuslabs/kafka-ui:v0.7.2
-      container_name: kafka-ui
-      depends_on:
-        - kafka-0
-      ports:
-        - 8085:8080
-      environment:
-        KAFKA_CLUSTERS_0_NAME: local
-        KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-0:9092
+  vett-zookeeper:
+    image: bitnami/zookeeper:3.9.2
+    container_name: vett-zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      TZ: Asia/Seoul
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - vett-network
+
+  vett-kafka:
+    image: bitnami/kafka:3.7.0
+    container_name: vett-kafka
+    ports:
+      - 9094:9094
+    environment:
+      TZ: Asia/Seoul
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_ENABLE_KRAFT: "no"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: vett-zookeeper:2181
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,EXTERNAL://:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://vett-kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+    depends_on:
+      - vett-zookeeper
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vett-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.7.2
+    container_name: vett-kafka-ui
+    depends_on:
+      vett-kafka:
+        condition: service_healthy
+    ports:
+      - 8085:8080
+    environment:
+      TZ: Asia/Seoul
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: vett-kafka:9092
+    networks:
+      - vett-network
+
+  vett-eureka-server:
+    build: ./VettEurekaServer
+    ports:
+      - "8761:8761"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-gateway-server:
+    build: ./VettGatewayServer
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+      vett-auth-server:
+        condition: service_started
+      vett-place-server:
+        condition: service_started
+      vett-chat-server:
+        condition: service_started
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-auth-server:
+    build: ./VettAuthServer
+    ports:
+      - "9091:9091"
+      - "50051:50051"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-chat-server:
+    build: ./VettChatServer
+    ports:
+      - "9095:9095"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+      vett-auth-server:
+        condition: service_started
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-place-server:
+    build: ./VettPlaceServer
+    ports:
+      - "9093:9093"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-llm-chat-server:
+    build: ./VettLLMChatServer
+    ports:
+      - "9096:9096"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+      vett-kafka:
+        condition: service_healthy
+    networks:
+      - vett-network
+
+  vett-api-integration-server:
+    build: ./VettApiIntegrationServer
+    ports:
+      - "9097:9097"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+    networks:
+      - vett-network
+
+  vett-llm-server:
+    build: ./VettLLMServer
+    ports:
+      - "5000:5000"
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - vett-network
+
+networks:
+  vett-network:
+    driver: bridge

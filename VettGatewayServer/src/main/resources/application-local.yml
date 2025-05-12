@@ -52,6 +52,14 @@ spring:
           uri: lb://VETT-CHAT-SERVER
           predicates:
             - Path=/chat/**, /admin/chat/**, /sub/**, /ws, /pub/**
+        - id: vett-llm-chat-service
+          uri: lb://VETT-LLM-CHAT-SERVER
+          predicates:
+            - Path=/llm/**
+        - id: vett-api-integration-service
+          uri: lb://VETT-API-INTEGRATION-SERVER
+          predicates:
+            - Path=/proxy/api/**
 
 jwt:
   secret: ${JWT_SECRET}
