@@ -8,5 +8,4 @@ langchain-pinecone
 python-dotenv
 pymongo
 pytz
-RecursiveCharacterTextSplitter
 docx2txt
