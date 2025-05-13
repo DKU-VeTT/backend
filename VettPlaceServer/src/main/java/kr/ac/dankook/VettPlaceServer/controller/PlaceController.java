@@ -58,21 +58,6 @@ public class PlaceController {
         List<PlaceDistResponse> distPlaces = placeService.nearbyPlaceProcess(categoryPlaces,coordinateRequest);
         return ResponseEntity.ok(new ApiResponse<>(200,distPlaces));
     }
-//
-    // 거리 순으로 데이터 정렬 ( 주소 입력, 카테고리 입력 )
-    @PostMapping("/dist/address/{category}")
-    public ResponseEntity<ApiResponse<List<PlaceDistResponse>>> getPlaceByAddressAndSortByDist(
-            @RequestBody @Valid CoordinateRequest coordinateRequest,BindingResult bindingResult,
-            @PathVariable String category){
-
-        if (bindingResult.hasErrors()){
-            validateBindingResult(bindingResult);
-        }
-
-        List<Place> categoryPlaces = placeService.findPlaceByCategoryProcess(category);
-        List<PlaceDistResponse> distPlaces = placeService.nearbyPlaceProcess(categoryPlaces,coordinateRequest);
-        return ResponseEntity.ok(new ApiResponse<>(200,distPlaces));
-    }
 
     // 현재 운영중인 장소 리스트, 카테고리 검색 필요
     @GetMapping("/open/{category}")
