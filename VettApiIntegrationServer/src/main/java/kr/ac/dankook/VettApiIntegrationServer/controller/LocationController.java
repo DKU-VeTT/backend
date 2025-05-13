@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/place")
+@RequestMapping("/proxy/api")
 public class LocationController {
 
     private final LocationService locationService;
