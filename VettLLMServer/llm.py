@@ -12,6 +12,9 @@ from config import answer_examples
 from mongoDBClient import MongoDBChatMessageHistory
 import textwrap
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_session_history(session_id: str) -> BaseChatMessageHistory:
     return MongoDBChatMessageHistory(session_id)

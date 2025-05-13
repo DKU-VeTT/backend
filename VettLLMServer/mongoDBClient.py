@@ -5,6 +5,9 @@ from langchain_core.messages import AIMessage, HumanMessage, BaseMessage
 from pytz import timezone
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 client = MongoClient(os.getenv("MONGODB_URI"))
 db = client["VeTT"]
