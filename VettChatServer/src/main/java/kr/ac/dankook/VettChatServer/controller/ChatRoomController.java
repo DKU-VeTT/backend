@@ -33,6 +33,15 @@ public class ChatRoomController {
                 chatRoomService.getChatRoomByKeywordProcess(keyword)));
     }
 
+    @GetMapping("/room/is-participate/{roomId}/{memberId}")
+    public ResponseEntity<ApiResponse<Boolean>> isParticipateChatRoom(
+            @PathVariable("roomId") @DecryptId Long roomId,
+            @PathVariable("memberId") String memberId
+    ){
+        return ResponseEntity.ok(new ApiResponse<>(200,
+                chatRoomService.isParticipateChatRoomProcess(roomId,memberId)));
+    }
+
     @PostMapping("/room")
     public ResponseEntity<ApiResponse<ChatRoomResponse>> createChatRoom(
             @RequestBody @Valid CreateChatRoomRequest createChatRoomRequest,

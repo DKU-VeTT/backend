@@ -37,6 +37,16 @@ public class ChatRoomService {
     private final MemberEntityConverter memberEntityConverter;
 
     @Transactional(readOnly = true)
+    public boolean isParticipateChatRoomProcess(Long roomId,String memberId){
+
+        ChatRoom chatRoom = chatRoomEntityConverter.getChatRoomByRoomId(roomId);
+        Member member = memberEntityConverter.getMemberByMemberId(memberId);
+        Optional<ChatRoomMember> targetChatRoomMember = chatRoomMemberRepository
+                .findByChatRoomAndMember(chatRoom, member);
+        return targetChatRoomMember.isPresent();
+    }
+
+    @Transactional(readOnly = true)
     public List<ChatRoomResponse> getChatRoomByKeywordProcess(String keyword){
         List<ChatRoom> chatRooms = chatRoomRepository
                 .findByTitleContainingIgnoreCase(keyword);
