@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ChatResponse {
 
     private String content;
-    private String email;
+    private String name;
     private String memberId;
     private LocalDateTime time;
 }

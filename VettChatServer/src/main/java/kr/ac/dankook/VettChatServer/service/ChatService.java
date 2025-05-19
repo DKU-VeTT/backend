@@ -40,11 +40,11 @@ public class ChatService {
     }
     public ChatResponse convertChatMessageToChatResponse(ChatMessage message){
         Optional<Member> targetMember = memberRepository.findById(message.getMemberId());
-        String email = targetMember.isPresent() ? targetMember.get().getEmail() : "알 수 없음";
+        String name = targetMember.isPresent() ? targetMember.get().getName() : "알 수 없음";
         String memberId = targetMember.isPresent() ? targetMember.get().getId() : "알 수 없음";
         return ChatResponse.builder()
                 .content(message.getContent())
                 .time(message.getCreatedTime())
-                .email(email).memberId(memberId).build();
+                .name(name).memberId(memberId).build();
     }
 }
