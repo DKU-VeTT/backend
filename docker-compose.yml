@@ -156,6 +156,18 @@ services:
     networks:
       - vett-network
 
+  vett-diagnosis-server:
+    build: ./VettDiagnosisServer
+    ports:
+      - "9098:9098"
+    environment:
+      TZ: Asia/Seoul
+    depends_on:
+      vett-eureka-server:
+        condition: service_started
+    networks:
+      - vett-network
+
   vett-llm-server:
     build: ./VettLLMServer
     ports:

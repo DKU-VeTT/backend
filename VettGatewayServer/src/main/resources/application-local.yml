@@ -64,6 +64,10 @@ spring:
           uri: http://vett-llm-server:5000
           predicates:
             - Path=/py/llm/**
+        - id: vett-diagnosis-service
+          uri: lb://VETT-DIAGNOSIS-SERVER
+          predicates:
+            - Path=/diagnosis/**
 
 jwt:
   secret: ${JWT_SECRET}
