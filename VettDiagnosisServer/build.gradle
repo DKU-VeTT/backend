@@ -1,0 +1,83 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'kr.ac.dankook'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2024.0.1")
+	set('springGrpcVersion', "0.3.0")
+}
+
+dependencies {
+
+	// gRPC
+	implementation "io.grpc:grpc-netty:1.69.0"
+	implementation 'io.grpc:grpc-protobuf:1.57.1'
+	implementation 'io.grpc:grpc-stub:1.57.1'
+	compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+	implementation 'io.grpc:grpc-services'
+	implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.kafka:spring-kafka'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.25.1"
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+compileJava.options.encoding='UTF-8'
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = "UTF-8"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
