@@ -64,6 +64,10 @@ spring:
           uri: http://vett-llm-server:5000
           predicates:
             - Path=/py/llm/**
+        - id: vett-model-service
+          uri: http://vett-model-server:5001
+          predicates:
+            - Path=/py/predict/**
         - id: vett-diagnosis-service
           uri: lb://VETT-DIAGNOSIS-SERVER
           predicates:
