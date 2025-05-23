@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+torch
+torchvision
+torchaudio
+pillow
+pandas
+requests
+opencv-python-headless
+numpy
+seaborn
+matplotlib
+python-multipart
