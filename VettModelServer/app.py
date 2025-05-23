@@ -15,7 +15,7 @@ import base64
 
 app = FastAPI()
 
-yolo_model = torch.hub.load('ultralytics/yolov5', 'custom', path='./skin_weights.pt', force_reload=True)
+yolo_model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model_trains/skin_weights.pt', force_reload=True)
 
 @app.post("/py/predict/skin")
 async def detect_image(file: UploadFile = File(...)):
