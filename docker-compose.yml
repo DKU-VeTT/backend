@@ -177,15 +177,6 @@ services:
     networks:
       - vett-network
 
-  vett-model-server:
-    build: ./VettModelServer
-    ports:
-      - "5001:5001"
-    environment:
-      TZ: Asia/Seoul
-    networks:
-      - vett-network
-
 networks:
   vett-network:
     driver: bridge
