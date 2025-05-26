@@ -19,7 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +43,7 @@ public class MailService {
 
     public void sendSignupMail(String email) throws IOException {
 
-        String content = loadEmailTemplate("src/main/resources/templates/signup-template.html", new HashMap<>());
+        String content = loadEmailTemplate("signup-template.html", new HashMap<>());
         MailResponse mailResponse = MailResponse.builder()
                 .mailAddress(email)
                 .title("[VeTT] 회원가입을 환영합니다.")
@@ -58,7 +61,7 @@ public class MailService {
         Map<String, String> variables = new HashMap<>();
         variables.put("verificationCode", verificationCode);
 
-        String content = loadEmailTemplate("src/main/resources/templates/verification-template.html", variables);
+        String content = loadEmailTemplate("verification-template.html", variables);
         return MailResponse.builder()
                 .mailAddress(member.getEmail())
                 .title("[VeTT] 인증번호 안내 이메일 입니다.")
@@ -66,15 +69,21 @@ public class MailService {
                 .build();
     }
 
-    private String loadEmailTemplate(String filePath, Map<String, String> variables) throws IOException {
-        Path path = Paths.get(filePath);
-        String content = Files.readString(path);
+    private String loadEmailTemplate(String path, Map<String, String> variables) throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("templates/" + path); // 패스 수정
 
-        for (Map.Entry<String, String> entry : variables.entrySet()) {
-            content = content.replace("{{" + entry.getKey() + "}}", entry.getValue());
+        if (inputStream == null) {
+            throw new FileNotFoundException("Template not found: " + path);
         }
 
-        return content;
+        String template = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+        for (Map.Entry<String, String> entry : variables.entrySet()) {
+            template = template.replace("{{" + entry.getKey() + "}}", entry.getValue());
+        }
+
+        return template;
     }
 
     public void sendMail(MailResponse mailResponse){
