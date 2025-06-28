@@ -82,15 +82,15 @@ API 게이트웨이를 통해 유기적으로 연결되며, 확장성과 장애 
 ![캡스톤 디자인 시스템 아키텍처 (1)](https://github.com/user-attachments/assets/e4f64607-ba67-4384-a3e6-2dcc526380a3)
 
 ### Transactional Outbox Pattern
-MSA 환경에서 가장 중요한 요소는 서버 간 데이터 동기화입니다. <br>
-이를 위해 Transactional Outbox Pattern을 적용하여 데이터베이스 일관성과 이벤트 발행의 신뢰성을 동시에 보장할 수 있습니다. <br>
+MSA 환경에서 가장 중요한 요소는 서버 간 데이터 동기화입니다. 이를 위해 Transactional Outbox Pattern을 적용하여 <br>
+데이터베이스 일관성과 이벤트 발행의 신뢰성을 동시에 보장할 수 있습니다. <br>
 
 #### 패턴 개요
 - Outbox 테이블에 데이터 변경과 관련된 이벤트 정보를 저장
 - Kafka로 메시지를 안전하게 발행하며 트랜잭션의 원자성 유지
 - 장애 발생 시에도 Outbox 테이블의 상태를 통해 후속 처리 가능
 
-#### Outbox 예
+#### Outbox 예시시
 | 필드               | 값                                                     |
 | ---------------- | ----------------------------------------------------- |
 | `id`             | de06bc17-abe1-4a41-83b8-838a2cf437e8                  |
@@ -99,7 +99,9 @@ MSA 환경에서 가장 중요한 요소는 서버 간 데이터 동기화입니
 | `payload`        | `{ "id": "H-87D...", "name": "오규찬", "email": "..." }` |
 | `timestamp`      | 2025-04-23 18:30:25.123                               |
 | `status`         | READY\_TO\_PUBLISH                                    |
+
 Outbox 상태는 아래와 같은 Enum으로 관리됩니다. <br>
+
 ```
 public enum OutboxStatus {
   READY_TO_PUBLISH,
@@ -122,8 +124,8 @@ public enum OutboxStatus {
 ##### 2단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
 | 시점              | 설명                                                                                                                               |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `Before_commit` | 트랜잭션 커밋 직전에 **Spring 이벤트 리스너**가 동작하여 Outbox 테이블에 이벤트(예: `UserDeleted`)를 **비동기적으로 저장**합니다.                                        |
-| 저장 내용           | Outbox 테이블에는 `aggregate_type`, `event_type`, `payload`, `timestamp`, `status` 등이 기록됩니다. `status`는 초기값 `READY_TO_PUBLISH`로 설정됩니다. |
+| `Before_commit` | 트랜잭션 커밋 직전에 **Spring 이벤트 리스너**가 동작하여 Outbox 테이블에 <br> 이벤트(예: `UserDeleted`)를 **비동기적으로 저장**합니다.                                        |
+| 저장 내용           | Outbox 테이블에는 `aggregate_type`, `event_type`, `payload`, `timestamp`, `status` 등이 <br> 기록됩니다. `status`는 초기값 `READY_TO_PUBLISH`로 설정됩니다. |
 
 
 ##### 3단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
@@ -141,10 +143,10 @@ public enum OutboxStatus {
 ##### 5단계: Kafka 시스템 메시지 전달
 | 대상                     | 설명                                                                       |
 | ---------------------- | ------------------------------------------------------------------------ |
-| **내부 Kafka 리스너**       | 인증 서비스 내 Kafka 리스너가 발행 성공을 확인하고, Outbox 상태를 `MESSAGE_CONSUME` 등으로 갱신합니다. |
-| **외부 서비스 (예: 채팅 서비스)** | Kafka 메시지를 수신한 뒤, 메시지의 회원 ID를 통해 gRPC로 회원 정보를 조회하거나 삭제 작업을 수행합니다.        |
+| **내부 Kafka 리스너**       | 인증 서비스 내 Kafka 리스너가 발행 성공을 확인하고, <br> Outbox 상태를 `MESSAGE_CONSUME` 등으로 갱신합니다. |
+| **외부 서비스** | Kafka 메시지를 수신한 뒤, 메시지의 회원 ID를 통해 <br> gRPC로 회원 정보를 조회하거나 삭제 작업을 수행합니다.        |
 | **gRPC 서비스 호출**        | Kafka 메시지 내 포함된 ID를 사용해 인증 서비스의 gRPC API로 최신 정보를 요청합니다.                  |
-| **데이터 동기화**            | 각 외부 서비스는 gRPC 응답을 기반으로 동기화 테이블을 업데이트(예: 회원 이름 변경, 삭제 등)합니다.             |
+| **데이터 동기화**            | 각 외부 서비스는 gRPC 응답을 기반으로 동기화 테이블을 업데이트 합니다.             |
 
 <br>
 
