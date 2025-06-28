@@ -81,6 +81,8 @@ API 게이트웨이를 통해 유기적으로 연결되며, 확장성과 장애 
 또한 서비스 전반은 Docker를 통해 컨테이너화되어 관리됩니다. <br>
 ![캡스톤 디자인 시스템 아키텍처 (1)](https://github.com/user-attachments/assets/e4f64607-ba67-4384-a3e6-2dcc526380a3)
 
+<br>
+
 ### Transactional Outbox Pattern
 MSA 환경에서 가장 중요한 요소는 서버 간 데이터 동기화입니다. 이를 위해 Transactional Outbox Pattern을 적용하여 <br>
 데이터베이스 일관성과 이벤트 발행의 신뢰성을 동시에 보장할 수 있습니다. <br>
@@ -114,19 +116,19 @@ public enum OutboxStatus {
 #### 패턴 흐름도
 ![image](https://github.com/user-attachments/assets/0f4adeaf-9fb3-4453-ac69-4fb395289da5)
 
-##### 1단계: 회원 정보 삭제 요청
+#### 1단계: 회원 정보 삭제 요청
 - 인증 및 회원 관리 서비스에서 회원 탈퇴 요청이 들어옵니다.
 - 해당 요청은 트랜잭션 내에서 처리됩니다.
 
 
-##### 2단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
+#### 2단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
 | 시점              | 설명                                                                                                                               |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `Before_commit` | 트랜잭션 커밋 직전에 **Spring 이벤트 리스너**가 동작하여 Outbox 테이블에 <br> 이벤트(예: `UserDeleted`)를 **비동기적으로 저장**합니다.                                        |
 | 저장 내용           | Outbox 테이블에는 `aggregate_type`, `event_type`, `payload`, `timestamp`, `status` 등이 <br> 기록됩니다. `status`는 초기값 `READY_TO_PUBLISH`로 설정됩니다. |
 
 
-##### 3단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
+#### 3단계: 트랜잭션 내부 이벤트 처리 (Outbox 기록)
 | 시점             | 설명                                                          |
 | -------------- | ----------------------------------------------------------- |
 | `After_commit` | 트랜잭션이 **성공적으로 커밋된 이후**, Spring의 이벤트 리스너가 Kafka로 메시지를 발행합니다. |
@@ -134,11 +136,11 @@ public enum OutboxStatus {
 | 상태 변경          | 발행 성공 시, Outbox 테이블의 `status`가 `PUBLISHED`로 변경됩니다.          |
 
 
-##### 4단계: Kafka 시스템 메시지 전달
+#### 4단계: Kafka 시스템 메시지 전달
 - Kafka 시스템은 메시지를 수신하고, 이를 구독 중인 여러 서비스로 전달합니다.
 
 
-##### 5단계: Kafka 시스템 메시지 전달
+#### 5단계: Kafka 시스템 메시지 전달
 | 대상                     | 설명                                                                       |
 | ---------------------- | ------------------------------------------------------------------------ |
 | **내부 Kafka 리스너**       | 인증 서비스 내 Kafka 리스너가 발행 성공을 확인하고, <br> Outbox 상태를 `MESSAGE_CONSUME` 등으로 갱신합니다. |
@@ -151,6 +153,8 @@ public enum OutboxStatus {
 #### Kafka 이벤트 발행 – Transactional Outbox Pattern 적용
 아래 코드는 Spring의 @TransactionalEventListener를 활용하여 <br>
 트랜잭션 커밋 전/후로 Outbox 이벤트를 안전하게 처리하고 Kafka에 발행하는 방식입니다. <br>
+
+<br>
 
 ##### BEFORE_COMMIT
 ```Java
@@ -185,6 +189,7 @@ public void handleKafkaEvent(OutboxEvent event) {
 - 발행 성공 시 OutboxStatus.PUBLISHED로 상태 변경
 - 실패 시 OutboxStatus.FAILED로 설정하고 KafkaSendException 발생
 
+<br>
 
 ##### 실패 이벤트 처리
 ```Java
