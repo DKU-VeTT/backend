@@ -90,7 +90,7 @@ MSA 환경에서 가장 중요한 요소는 서버 간 데이터 동기화입니
 - Kafka로 메시지를 안전하게 발행하며 트랜잭션의 원자성 유지
 - 장애 발생 시에도 Outbox 테이블의 상태를 통해 후속 처리 가능
 
-#### Outbox 예시시
+#### Outbox 예시
 | 필드               | 값                                                     |
 | ---------------- | ----------------------------------------------------- |
 | `id`             | de06bc17-abe1-4a41-83b8-838a2cf437e8                  |
@@ -113,8 +113,6 @@ public enum OutboxStatus {
 ```
 #### 패턴 흐름도
 ![image](https://github.com/user-attachments/assets/0f4adeaf-9fb3-4453-ac69-4fb395289da5)
-
-<br>
 
 ##### 1단계: 회원 정보 삭제 요청
 - 인증 및 회원 관리 서비스에서 회원 탈퇴 요청이 들어옵니다.
@@ -317,4 +315,3 @@ public void handleKafkaEvent(OutboxEvent event) {
 | ---------------------------------- | ------ | --------------- |
 | `/proxy/api/address-to-coordinate` | POST   | 주소 → 좌표 변환      |
 | `/proxy/api/route`                 | POST   | 목적지까지의 교통 정보 반환 |
-
